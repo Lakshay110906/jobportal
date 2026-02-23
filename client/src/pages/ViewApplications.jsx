@@ -28,32 +28,39 @@ const ViewApplications = () => {
     }
   }
 
-  //Function to update Job Applcation Status 
-  const changeJobApplicationStatus = async (id,status) => {
-    console.log(id,status)
-    console.log("TOKEN:", companyToken)
+  // Function to update Job Application Status 
+  const changeJobApplicationStatus = async (id, status) => {
+    console.log("1. Button Clicked! ID:", id, " | New Status:", status);
+    
     try {
-      const {data} = await axios.post(backendUrl + '/api/company/change-status',{id,status},{headers :{token : companyToken}})
+      const payload = { id, status };
+      console.log("2. Sending Payload:", payload);
       
+      const { data } = await axios.post(
+        backendUrl + '/api/company/change-status', 
+        payload, 
+        { headers: { token: companyToken } }
+      );
 
-      if(data.success){
-        fetchCompanyJobApplications()
-        // toast.success(data.message)
-      }
-      else{
-        toast.error(data.message)
+      console.log("3. Backend Response Data:", data);
+
+      if (data.success) {
+        await fetchCompanyJobApplications();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
-      
-      toast.error(error.message)
+      console.error("4. Axios Error:", error);
+      toast.error(error.response?.data?.message || error.message);
     }
   }
 
   useEffect(()=>{
-    if(companyToken) fetchCompanyJobApplications()
+    if(companyToken){fetchCompanyJobApplications()}
   },[companyToken])
 
-  return applicants ? applicants.length ===0 ? (<div></div>) : (
+  return applicants ? applicants.length ===0 ? (<div className='flex items-center justify-center h-[70vh]'><p className='text-xl sm:text-2xl'>No Applications available </p></div>) : (
     <div className='conatainer mx-auto p-4'>
       <div>
         <table className='w-full max-w-4xl bg-white border border-gray-200 max-sm:text-sm'>

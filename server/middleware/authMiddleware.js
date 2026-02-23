@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import Company from '../models/Company.js'
 
 export const protectCompany = async(req,res,next) => {
+    console.log(`[SERVER HIT] -> ${req.method} ${req.url}`);
     const token = req.headers.token
 
     if(!token){

@@ -145,26 +145,45 @@ export const getCompanyPostedJobs = async (req, res) => {
     }
 }
 
-//Change Job Application Status
+// Change Job Application Status
 export const changeJobApplicationsStatus = async (req, res) => {
     try {
-        const {id ,status} = req.body
-        //Find Job application and update status
-        await JobApplication.findOneAndUpdate({_id:id},{status})
-        res.json({success : true ,message : 'Status Changed'})
-    } catch (error) {
-        res.json({ success: false, message: error.message })
-    }
+        console.log("--- CHANGING STATUS API HIT ---");
+        const { id, status } = req.body;
+        console.log("A. Received ID:", id);
+        console.log("B. Received Status:", status);
         
+        // Find Job application and update status
+        const application = await JobApplication.findOneAndUpdate(
+            { _id: id }, 
+            { status },
+            { new: true }
+        );
+
+        console.log("C. Database Result:", application);
+
+        if (!application) {
+            return res.json({ success: false, message: 'Application not found in database' });
+        }
+
+        res.json({ success: true, message: 'Status Changed', data: application });
+    } catch (error) {
+        console.log("D. Server Error Catch Block:", error.message);
+        res.json({ success: false, message: error.message });
+    }
 }
 //Change job visibility
 export const changeVisiblity = async (req, res) => {
     try {
+        console.log("FUNCTION HIT");  
         const { id } = req.body
+        
+
 
         const companyId = req.company._id
 
         const job = await Job.findById(id)
+        console.log(job)
 
         if (companyId.toString() === job.companyId.toString()) {
             job.visible = !job.visible

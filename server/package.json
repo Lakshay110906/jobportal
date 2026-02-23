@@ -4,7 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon --import ./config/instrument.js server.js",
+    "server": "nodemon server.js",
     "start": "node server.js"
   },
   "keywords": [],
@@ -13,8 +13,6 @@
   "description": "",
   "dependencies": {
     "@clerk/express": "^1.7.72",
-    "@sentry/node": "^9.20.0",
-    "@sentry/profiling-node": "^9.20.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
