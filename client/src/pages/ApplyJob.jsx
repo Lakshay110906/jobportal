@@ -38,34 +38,45 @@ const ApplyJob = () => {
 
   }
 
-  const applyHandler = async () =>{
-    try {
-      if(!userData){
-        return toast.error('Login to apply for job')
-      }
-      if(!userData.resume){
-        navigate('/applications')
-        return toast.error('Upload resume to apply')
-      }
+ // client/src/pages/ApplyJob.jsx
 
-      const token = await getToken()
-
-      const {data} = await axios.post(backendUrl + '/api/users/apply' , {jobId : JobData._id}, {headers : {Authorization : `Bearer ${token}`}})
-
-      if(data.success){
-        toast.success(data.message)
-        fetchUserApplications()
-      }
-      else{
-        toast.error(data.message)
-      }
-
-    } catch (error) {
-      toast.error(error.message
-
-      )
+const applyHandler = async () => {
+  try {
+    // 1. Check if Clerk user is actually logged in first
+    const token = await getToken();
+    
+    if (!token) {
+      return toast.error('Login to apply for job');
     }
+
+    // 2. Check if userData has loaded yet
+    if (!userData) {
+      return toast.info('Loading user profile, please try again in a moment...');
+    }
+
+    // 3. Check for resume
+    if (!userData.resume) {
+      navigate('/applications');
+      return toast.error('Upload resume to apply');
+    }
+
+    const { data } = await axios.post(
+      backendUrl + '/api/users/apply', 
+      { jobId: JobData._id }, 
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      fetchUserApplications();
+    } else {
+      toast.error(data.message);
+    }
+
+  } catch (error) {
+    toast.error(error.message);
   }
+};
 
   const checkAlreadyApplied = async () =>{
     const hasApplied = userApplications.some(item => item.jobId._id === JobData._id)
