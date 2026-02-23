@@ -4,7 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js",
+    "server": "nodemon --import ./config/instrument.js server.js",
     "start": "node server.js"
   },
   "keywords": [],
@@ -12,8 +12,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@sentry/node": "^10.38.0",
-    "@sentry/profiling-node": "^10.38.0",
+    "@clerk/express": "^1.7.72",
+    "@sentry/node": "^9.20.0",
+    "@sentry/profiling-node": "^9.20.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
@@ -22,7 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
     "multer": "^2.0.2",
-    "nodemon": "^3.1.11",
+    "nodemon": "^3.1.14",
     "svix": "^1.85.0"
   }
 }
